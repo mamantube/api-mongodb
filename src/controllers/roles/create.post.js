@@ -1,5 +1,12 @@
-import db from "../../config/connection.js"
+import rolesModel from "../../models/roles.js"
 import Message from "../../utils/message.js";
+import { z } from "zod";
+import Validation from "../../utils/validation.js";
+
+
+const schema = {
+   name: z.string().min(1, "Name is required"),
+} 
 
 /** 
  * @typedef {import("express").Request} ExpressRequest 
@@ -12,8 +19,16 @@ import Message from "../../utils/message.js";
  * @param {ExpressResponse} res 
  */
 
-export default function(req, res) {
-    const result = db.collection("roles").find();
+export default async function(req, res) {
+    const body = req.body;
+    const validation = Validation(schema, body);
 
-    Message(res, 200, "All data", result);
+    if (!validation.success) return Message(res, 422, "Error validation", {errors: validation.errors})
+    
+    try {
+        rolesModel.insertOne(validation.data)
+        Message(res, 201, "Create role success");
+    } catch (error) {
+        Message(res, 500, error.message || "Internal server error");
+    }
 };
