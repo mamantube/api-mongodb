@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const myDb = users_db;
+const myDb = "db_learning";
 
 try {
     await mongoose.connect(`mongodb://127.0.0.1:27017/${myDb}`)

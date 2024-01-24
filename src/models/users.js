@@ -8,13 +8,17 @@ const usersSchema = new Schema({
         required: true,
     },
     password: {
-        type: string,
+        type: String,
         required: true,
     },
     role_id: {
-        type: Schema.types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "roles",
         required: true,
+    },
+    deleted_at : {
+        type: Date,
+        default: null,
     }
 },  {
     timestamp: true,
