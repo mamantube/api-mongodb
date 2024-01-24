@@ -1,12 +1,13 @@
-import rolesModel from "../../models/roles.js"
+import rolesModel from "../../models/roles.js";
 import Message from "../../utils/message.js";
+import { ObjectId } from "bson";
 import { z } from "zod";
 import Validation from "../../utils/validation.js";
 
 
 const schema = {
-   name: z.string().min(1, "Name is required"),
-} 
+    name: z.string().min(1, "Name is required"),
+ }
 
 /** 
  * @typedef {import("express").Request} ExpressRequest 
@@ -19,16 +20,21 @@ const schema = {
  * @param {ExpressResponse} res 
  */
 
-export default async function(req, res) {
+export default async function (req, res) {
     const body = req.body;
     const validation = Validation(schema, body);
 
     if (!validation.success) return Message(res, 422, "Error validation", {errors: validation.errors})
-    
+
     try {
-        await rolesModel.insertOne(validation.data)
-        Message(res, 201, "Create role success");
+        const _id = new ObjectId(req.params._id)
+
+        const result = await rolesModel.findOneAndUpdate({ _id}, {$set: validation.data});
+
+        if (!result) return Message(res, 404, "Data not found")
+
+        Message(res, 200, "Update data success");
     } catch (error) {
-        Message(res, 500, error.message || "Internal server error");
+        Message(res, 500, error.message || "Internal server error ")
     }
-};
+}
