@@ -17,7 +17,7 @@ export default async function (req, res) {
     const q = req.query.q || "";
     const sort_by = req.query.sort_by ? req.query.sort_by : "desc";
     const page = req.query.page ? Number(req.query.page) : 0;
-    const per_page = req.query.per_page ? Number(req.query.per_page) : 10;
+    const per_page = req.query.per_page ? Number(req.query.per_page) : 1;
     const skip = page === 1 ? 0 : (page - 1) * per_page;
     const limit = per_page;
     
