@@ -14,5 +14,6 @@ app.use(express.urlencoded({ limit: "1mb", extended: true }));
 
 app.use("/api/v1", roleRoutes);
 app.use("/api/v2", userRoutes);
+
 app.listen(3000, () => console.log("Service running on http://localhost:3000"));
 

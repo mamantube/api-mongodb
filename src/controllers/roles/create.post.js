@@ -26,7 +26,8 @@ export default async function(req, res) {
     if (!validation.success) return Message(res, 422, "Error validation", {errors: validation.errors})
     
     try {
-        await rolesModel.insertOne(validation.data)
+        // await rolesModel.insertOne(validation.data)
+        await rolesModel.create(validation.data)
         Message(res, 201, "Create role success");
     } catch (error) {
         Message(res, 500, error.message || "Internal server error");
